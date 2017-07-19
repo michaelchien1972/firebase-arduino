@@ -131,14 +131,13 @@ void FirebaseArduino::stream(const String& path) {
 }
 
 bool FirebaseArduino::available() {
-  return http_->getStreamPtr()->available();
+  return true; 
 }
 
 FirebaseObject FirebaseArduino::readEvent() {
-  auto client = http_->getStreamPtr();
-  String type = client->readStringUntil('\n').substring(7);;
-  String event = client->readStringUntil('\n').substring(6);
-  client->readStringUntil('\n'); // consume separator
+  String type = http_->getType();
+  String event = http_->getEvent();  
+  http_->clrPending();
   FirebaseObject obj = FirebaseObject(event.c_str());
   obj.getJsonVariant().asObject()["type"] = type;
   return obj;
