@@ -46,7 +46,7 @@ void setup() {
   Serial.print("connected: ");
   Serial.println(WiFi.localIP());
   
-  Firebase.begin("publicdata-cryptocurrency.firebaseio.com");
+  Firebase.begin("s-usc1c-nss-210.firebaseio.com");
   Firebase.stream("/bitcoin/last");  
 }
 
