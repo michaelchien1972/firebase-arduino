@@ -4,6 +4,8 @@
 // Currently this is needed to use std::string on Arduino.
 namespace std{
 void __attribute__((weak)) __throw_out_of_range(const char* str) {
+#if defined (ESP8266)	
     panic();
+#endif    
 }
 }
