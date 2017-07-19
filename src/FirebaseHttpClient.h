@@ -20,6 +20,15 @@ class FirebaseHttpClient {
 
   virtual void end() = 0;
 
+  /* support FirebaseStream - Type, Event */
+  virtual String getType() = 0;
+  virtual String getEvent() = 0;  
+  
+  /* support FurebaseStream - Pending switch */
+  virtual void setPending() = 0;
+  virtual bool getPending() = 0;
+  virtual void clrPending() = 0;
+  
   virtual void addHeader(const std::string& name, const std::string& value) = 0;
   virtual void collectHeaders(const char* header_keys[],
                               const int header_key_count) = 0;
