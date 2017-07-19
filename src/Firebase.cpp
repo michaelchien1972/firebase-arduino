@@ -25,7 +25,7 @@ std::string makeFirebaseURL(const std::string& path, const std::string& auth) {
   }
   url += path + ".json";
   if (auth.length() > 0) {
-    url += "?auth=" + auth;
+    url += "?api_key=" + auth; 
   }
   return url;
 }
@@ -93,6 +93,12 @@ FirebaseCall::FirebaseCall(const std::string& host, const std::string& auth,
                            const std::string& data, FirebaseHttpClient* http) : http_(http) {
   std::string path_with_auth = makeFirebaseURL(path, auth);
   http_->setReuseConnection(true);
+
+#if 0    
+  if (std::string(method) == "STREAM") 
+    path_with_auth += "?ns=publicdata-cryptocurrency "; 
+#endif
+  
   http_->begin(host, path_with_auth);
 
   bool followRedirect = false;
@@ -102,23 +108,13 @@ FirebaseCall::FirebaseCall(const std::string& host, const std::string& auth,
     followRedirect = true;
   }
 
-  if (followRedirect) {
-    const char* headers[] = {"Location"};
-    http_->collectHeaders(headers, 1);
-  }
-
   int status = http_->sendRequest(method, data);
 
   // TODO: Add a max redirect check
   if (followRedirect) {
-    while (status == HttpStatus::TEMPORARY_REDIRECT) {
-      std::string location = http_->header("Location");
       http_->setReuseConnection(false);
-      http_->end();
+      http_->setPending(); 
       http_->setReuseConnection(true);
-      http_->begin(location);
-      status = http_->sendRequest("GET", std::string());
-    }
   }
 
   if (status != 200) {
@@ -174,7 +170,7 @@ FirebasePush::FirebasePush(const std::string& host, const std::string& auth,
   }
 }
 
-// FirebasePush
+// FirebaseRemove
 FirebaseRemove::FirebaseRemove(const std::string& host, const std::string& auth,
                                const std::string& path,
                                FirebaseHttpClient* http)
