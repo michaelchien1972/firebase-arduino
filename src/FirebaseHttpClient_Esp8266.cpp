@@ -1,4 +1,4 @@
-
+#if defined (ESP8266)
 #include "FirebaseHttpClient.h"
 
 #include <stdio.h>
@@ -35,6 +35,28 @@ class FirebaseHttpClientEsp8266 : public FirebaseHttpClient {
     http_.end();
   }
 
+   /* support FirebaseStream - Type, Event */
+  String getType() override {
+    return http_.getType();
+  }
+
+  String getEvent() override {
+    return http_.getEvent();
+  }
+
+  /* support FirebaseStream - Pending switch */
+  bool getPending() override {
+    return http_.getPending();
+  }
+  
+  void setPending() override {
+    http_.setPending();
+  }
+  
+  void clrPending() override {
+    http_.clrPending();	
+  }
+ 
   void addHeader(const std::string& name, const std::string& value) override {
     http_.addHeader(name.c_str(), value.c_str());
   }
@@ -70,4 +92,5 @@ class FirebaseHttpClientEsp8266 : public FirebaseHttpClient {
 FirebaseHttpClient* FirebaseHttpClient::create() {
   return new FirebaseHttpClientEsp8266();
 }
- 
+#endif
+
