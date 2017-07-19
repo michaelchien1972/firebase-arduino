@@ -230,6 +230,10 @@ class FirebaseArduino {
   std::string auth_;
   FirebaseError error_;
   std::unique_ptr<FirebaseHttpClient> http_;
+ 
+   /* support FirebaseStream */
+  String type;
+  String event; 
 };
 
 extern FirebaseArduino Firebase;
